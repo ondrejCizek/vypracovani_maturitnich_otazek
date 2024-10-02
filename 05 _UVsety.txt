@@ -1,0 +1,80 @@
+Co rozumíme v CGI pod pojmem textura a proč je vůbec chceme používat v animovaných filmech a digitálních hrách?
+	>aplikování 2d obrázku na 3d model. Můžeme tím předat divákovi více nežli jen tvar, ale i barvu, materiál, světlo a mnoho dalších informací. Také nám může usnadnit práci v tom, že uschováme detail high-poly modelu v low-poly, pomocí stínů (viz baking)
+Jakým způsobem ovlivňují textury storytelling? Vyjmenujte několik příkladů z praxe.
+	>Vymodelovaný donut může buď být sladká a barvená delikatesa, nebo zšedlý a plísnivý odpad. Pohádková chatka se může proměnit v komunistickou chatrč s opadávající omítkou. Mladá dívka se může stát zvrásčenou, nemocnou a omlácenou bábou.
+Jak chceme fotit textury? (světlo, úhel, objektiv)
+	>Světlo chceme neutrální, aby byla zachována původní barva a aby na objektu se neobjevovaly žádné stíny. Fotit chceme zepředu, aby nebyla patrná perspektivní zkratka. Chceme mít Co největší zoom (aby se nezdeformovala textura perspektivou, jako třeba u rybího oka) a nejmenší clonu |(aby celý objekt byl ostrý).
+Co je to image sprite a jak a proč se používá?
+	>Image sprite je jeden obrázek, který pokryje 3d model a přidá mu texturu. Narozdíl od toho Image atlas obsahuje několik textur pro několik modelů v jednom obrázku (aby snížil draw count)
+Co je to UV set a proč ho potřebujeme dělat?
+	>Způsob jak obrázek rozstříháme, abychom jej mohli položit na 2d plochu (jako na papír). 
+Jaké problémy mohou vzniknout při rozkladu např. planety Země na dvourozměrnou mapu?
+	>Kulaté objekty je nemožné rozložit na 2d plochu, takže musíme udělat buď mnoho střihů nebo obraz roztánout.
+Jaké rozlišení by měly mít textury v kontextu renderu? (nepsané pravidlo poměru velikostí textur vůči velikost renderu)
+	>cca 2x rozlišení jako kolik plochy bude zabírat na konečném renderu. (500 px na obrazu, 1k textura)
+Jaké jsou typické rozměry textur? Jaké rozlišení a jaké principy uplatňujeme (nejen) v počítačových hrách v souvislosti pamětí počítače/konzole?
+	>Vždy v mocninách dvou. Počítačová grafika pracuje s binární soustavou čísel, ta se v mocninách dvou pohybuje. Čím větší textura a čím víc texture callů, tím je to zátěžnější pro systém. Na to musí hlavně dávat pozor mobilní vývojáři.
+Jakým způsobem vytváříme UVs v Mayi a jaké nám k tomu tento program nabízí nástroje?
+	>Pomocí ševů, kterými rozestříháme 3d objekt. Většinou to děláme se low poly modely, pro větší kontrolu nad každým edgem, který rozestříhneme.
+Jaké metody projekce UVs můžeme ve 3D použít?
+	>PLOCHÉ (terény, plochy), VÁLCOVÉ (trubky, NEJČASTĚJŠÍ MAPA SVĚTA), KULOVÉ (polokoule, koule), KRYCHLOVÉ (krychle a krabice)
+Jaké zásady chceme dodržovat při tvorbě UVs? (počty a umístění řezů)
+	> 
+Jak vypadají výchozí UV sety základních geometrických 3D objektů? (válec, koule, krychle, ...)
+	> 
+Co je UV distortion a jakým způsobem nám pomáhá při tvorbě UVs v Mayi?
+	>Ukazuje nám, kde se bude muset 2d obraz roztáhnout, aby se vešel na geometrii. Díky němu můžeme vidět chyby v UV unwrapu a opravit je.
+Proč se používá šachovnicová textura?
+	>Jednoduše se v ní rozezná rozdílná texel densita faceů a nebo jakýkoliv warping.
+Jaké jsou rozdílnosti tvorby UV setu v programech jako je ZBrush nebo Mudbox, příp. další?
+	>Jsou to programy na sculpting, ne na tvoření UV setů. V profesionálním světě se jejich barvení využívají max jako podklady nebo koncepty, ale mohou mít mnoho malých chyb a nesedí do rigidního workflow.
+Co je principem vertex paintu? K čemu všemu jej můžeme používat?
+	>Nastavit přímo barvu specifickému vertexu. Shading, tinting/barvení modelů, mlha
+Co je to Polypaint (ZBrush)?
+	>
+Co je to absolutně černé těleso?
+	>
+Co je PBR/PBS workflow a na jakých principech se zakládá?
+	>
+Co je texture baking a z jakého důvodu ho chceme uplatňovat, zejména v interaktivních aplikacích?
+	>
+Jaké máme jednotlivé typy textur, jak vypadají a k čemu slouží? (viz cvičení s planetami sluneční soustavy) >
+- albedo / base color - vs. diffuse >
+- bump vs. normal vs. displacement >
+- height >
+- specular >
+- curvature >
+- thickness (+návaznost na SSS materiály) >
+- ambient occlusion >
+- ID mask >
+- emission >
+- transparency >
+
+Co je environment mapping, reflection probe a jaký je jejich význam?
+	>Jsou to obrázky, které odráží světlo nebo obraz na daný objekt. Využíváme je pro vytvoření efektu odrazu v na objektech, bounce light atd., bez toho abychom to museli dělat v reálném čase pomocí drahých a zátěžových operací jako je raytracing (v reálném čase).
+Co je to lightmapping a proč se používá?
+	>Dopředu vypočítané světlo, zapečené do textury zachrání MNOHO vypočítávací síly, protože už počítač nemusí vymýšlet světlo.
+Co jsou light probes a jaké nacházejí uplatnění?
+	>Zaznamenávají světlo v prostoru, narozdíl od zapečených stínů, a tak je může engine využít aby vytvářel stíny hýbajících se těles. Ušetří to mnoho komputační síly.
+Co jsou to 2D/3D procedurální textury a jaký je rozdíl mezi nimi a rastrovou texturou?
+	>Procedurální mapy vypočítá počítač, takže se většinou dají přiblížit či opakovat za sebou kolikrát chceme. Nemalují se jako ratrové textury, pouze říkáme jak má složit počítač filtry, vectorové informace či obrázky dohromady, aby vytvořil novou texturu.
+Na jakém principu je postaveno generování šumu? (White, Perlin, Simplex, Billow, Gaussian, Voronoi ...)
+	>
+Co je to izotropie?
+	>
+Uveďte příklad generování materiálu použitím procedurálních textur. Jakými způsoby můžeme zajistit nepravidelnosti povrchu?
+	>Hustým šumem vytvoříme texturu hrubé omítky. Pomocí dalšího šumu uděláme hladší a méně kontrastní skvrny na omítce. Smícháme gradient mapu a noise abychom přelnuli plíšnové fleky na téže zdi. Pomocí přelínajících se šumů, na které naneseme filtry.
+Co je to bezešvá (seamless) textura?
+	>Textura která se dá napojit na sama sebe, bez jasného okraje
+Co je ve 3D textuře decal a proč jej chceme používat? Odkud tento pojem pochází?
+	>Pochází z modelařiny/automobilů. Je to aplikování průhledné "nálepky" na model. Hodí se, pokud potřebujeme udělat custom modely (
+Co je to fotogrametrie a na jakém principu je postavená?
+	>Naskenujeme reálný objekt a převedeme ho do 3d prostoru. To se potá dá využít jako podklad pro jedodušší modelování, ale hrubé modely bez úprav jsou většinou nepoužitelné sami o sobě.
+Co je to PTEX, kdo s ním přišel poprvé (a v jakém celovečerním filmu), jaké má přednosti a limity?
+	>
+Co je to UDIM a k čemu se používá v praxi?
+	>
+Jak fungují a jak se používají programy v balíku Adobe Substance (Painter, Designer, Sampler, Stager) nebo Marmoset Toolbag?
+	>
+Jak se postupuje při výrobě procedurálního materiálu v Substance Painteru? (generátory, filtry, masky)
+	>
