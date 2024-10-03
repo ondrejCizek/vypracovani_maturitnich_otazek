@@ -7,7 +7,7 @@ Jak chceme fotit textury? (světlo, úhel, objektiv)
 Co je to image sprite a jak a proč se používá?
 	>Image sprite je jeden obrázek, který pokryje 3d model a přidá mu texturu. Narozdíl od toho Image atlas obsahuje několik textur pro několik modelů v jednom obrázku (aby snížil draw count)
 Co je to UV set a proč ho potřebujeme dělat?
-	>Způsob jak obrázek rozstříháme, abychom jej mohli položit na 2d plochu (jako na papír). 
+	>Způsob jak model rozstříháme, abychom jej mohli položit na 2d plochu (jako na papír). 
 Jaké problémy mohou vzniknout při rozkladu např. planety Země na dvourozměrnou mapu?
 	>Kulaté objekty je nemožné rozložit na 2d plochu, takže musíme udělat buď mnoho střihů nebo obraz roztánout.
 Jaké rozlišení by měly mít textury v kontextu renderu? (nepsané pravidlo poměru velikostí textur vůči velikost renderu)
@@ -19,9 +19,9 @@ Jakým způsobem vytváříme UVs v Mayi a jaké nám k tomu tento program nabí
 Jaké metody projekce UVs můžeme ve 3D použít?
 	>PLOCHÉ (terény, plochy), VÁLCOVÉ (trubky, NEJČASTĚJŠÍ MAPA SVĚTA), KULOVÉ (polokoule, koule), KRYCHLOVÉ (krychle a krabice)
 Jaké zásady chceme dodržovat při tvorbě UVs? (počty a umístění řezů)
-	> 
+	> Co nejméně ostrovů (abychom se vyznali v UV setu), ale nesmí se rozstříhané vertexy přelínat. Chceme je umístit tam, kde šev nebude vidět (kdekoliv je šev, textura je narušena = nenapojuje se) a na pravé rohy
 Jak vypadají výchozí UV sety základních geometrických 3D objektů? (válec, koule, krychle, ...)
-	> 
+	> Krychle má obvykle šest ploch, které se rozloží do tvaru kříže. Válec má horní a dolní základnu, které jsou rozloženy jako kruhy, a boční plášť, který se rozvine do obdélníku. Koule se většinou rozvine pomocí projekční metody do sady dílků připomínajících pruhy nebo do tvaru blízkému mapě světa s póly nahoře a dole.
 Co je UV distortion a jakým způsobem nám pomáhá při tvorbě UVs v Mayi?
 	>Ukazuje nám, kde se bude muset 2d obraz roztáhnout, aby se vešel na geometrii. Díky němu můžeme vidět chyby v UV unwrapu a opravit je.
 Proč se používá šachovnicová textura?
@@ -31,27 +31,27 @@ Jaké jsou rozdílnosti tvorby UV setu v programech jako je ZBrush nebo Mudbox, 
 Co je principem vertex paintu? K čemu všemu jej můžeme používat?
 	>Nastavit přímo barvu specifickému vertexu. Shading, tinting/barvení modelů, mlha
 Co je to Polypaint (ZBrush)?
-	>
+	>Polypaint je technologie v ZBrush, která umožňuje malovat barvy přímo na model bez potřeby UV mapy. Barvy se ukládají do každého jednotlivého polygonu modelu, což znamená, že kvalita a detail závisí na hustotě polygonů daného modelu.
 Co je to absolutně černé těleso?
-	>
+	>Fyzikální model pro objekty, které pohlcují všechno světlo, které na ně dopadne, nebo pro objekty emisní (zářivé)
 Co je PBR/PBS workflow a na jakých principech se zakládá?
-	>
+	>PBR (Physically Based Rendering) nebo PBS (Physically Based Shading) je metoda, která simuluje světlo a materiály na základě fyzikálních vlastností. Tento workflow umožňuje realistické zobrazení materiálů jako kov, sklo nebo dřevo. Principem je zachování energetické rovnováhy – povrch neodráží více světla, než kolik přijme, a chování světla na povrchu závisí na jeho vlastnostech, jako je drsnost, specular, albedo atd.
 Co je texture baking a z jakého důvodu ho chceme uplatňovat, zejména v interaktivních aplikacích?
-	>
-Jaké máme jednotlivé typy textur, jak vypadají a k čemu slouží? (viz cvičení s planetami sluneční soustavy) >
-- albedo / base color - vs. diffuse >
-- bump vs. normal vs. displacement >
-- height >
-- specular >
-- curvature >
-- thickness (+návaznost na SSS materiály) >
-- ambient occlusion >
-- ID mask >
-- emission >
-- transparency >
+	>Texture baking je proces, kdy jsou různé detaily a efekty (např. světlo, stíny, AO, normal mapy) z komplexního 3D modelu "zapečeny" do textury a poté aplikovány na jednodušší verzi modelu. Šetří tak výpočetní výkon, nejčastěji využívané ve hrách
+Jaké máme jednotlivé typy textur, jak vypadají a k čemu slouží? (viz cvičení s planetami sluneční soustavy) 
+- albedo / base color - vs. diffuse > Albedo (base color) je čistá barva povrchu bez vlivu světla a stínů. Diffuse je starší pojem, který zahrnoval i některé světelné vlastnosti, což PBR workflow minimalizuje. Albedo nám tak umožňuje zpracovat barvy materiálu realisticky.
+- bump vs. normal vs. displacement > BUMP : černobíle, výškové nerovnosti na povrchu (prosté, ale dnes už málo využívané = není tak přesné jako normal). NORMAL : RGB, jemné detaily, a odrazy světla. DISPLACEMENT : jako jediný MĚNÍ GEOMETRII
+- height > jako DISPLACEMENT, ale častěji se využívá u terénu.
+- specular > lesklost/reflexe (nahradil METALNESS): černobílé... světlejší = lesklejší
+- curvature > Curvature mapa zvýrazňuje hrany a zakřivení modelu. Pomáhá například při generování opotřebení nebo škrábanců na povrchu
+- thickness (+návaznost na SSS materiály) > Jak má být tlustý materiál (jako napříkla kůže je různě tlustá na obličeji. Roztáhlá a užší na lících, tlustá na tvářích) pro simulaci SUB SURFACE OBJEKTU
+- ambient occlusion > AO mapa přidává stíny do oblastí, kde světlo nemůže dobře proniknout, například do záhybů a rohů.
+- ID mask > ID maska je barevná textura, která označuje různé části modelu různými barvami. Slouží k rychlému výběru materiálů nebo oblastí při následném texturování nebo shadingu.
+- emission > Emission textura řídí, jaké části objektu budou vyzařovat světlo. Používá se pro simulaci svítících objektů, jako jsou obrazovky, světla nebo plameny.
+- transparency > Transparency map určuje, jaké části modelu jsou průhledné nebo neprůhledné: černobílé... tmavší = průhlednější
 
 Co je environment mapping, reflection probe a jaký je jejich význam?
-	>Jsou to obrázky, které odráží světlo nebo obraz na daný objekt. Využíváme je pro vytvoření efektu odrazu v na objektech, bounce light atd., bez toho abychom to museli dělat v reálném čase pomocí drahých a zátěžových operací jako je raytracing (v reálném čase).
+	>Lightmapping je metoda, při které jsou světelné informace, včetně stínů a světelné interakce, předem vypočítány a uloženy do textury (lightmap). Tato metoda se používá zejména v hrách a dalších interaktivních aplikacích, aby se minimalizovala výpočetní náročnost světelných efektů v reálném čase.
 Co je to lightmapping a proč se používá?
 	>Dopředu vypočítané světlo, zapečené do textury zachrání MNOHO vypočítávací síly, protože už počítač nemusí vymýšlet světlo.
 Co jsou light probes a jaké nacházejí uplatnění?
@@ -59,22 +59,22 @@ Co jsou light probes a jaké nacházejí uplatnění?
 Co jsou to 2D/3D procedurální textury a jaký je rozdíl mezi nimi a rastrovou texturou?
 	>Procedurální mapy vypočítá počítač, takže se většinou dají přiblížit či opakovat za sebou kolikrát chceme. Nemalují se jako ratrové textury, pouze říkáme jak má složit počítač filtry, vectorové informace či obrázky dohromady, aby vytvořil novou texturu.
 Na jakém principu je postaveno generování šumu? (White, Perlin, Simplex, Billow, Gaussian, Voronoi ...)
-	>
+	>Generování šumu je matematická technika využívající náhodné funkce k vytváření textur nebo efektů. White noise je čistě náhodný šum, kde každý pixel má jinou hodnotu. Perlin noise vytváří plynulé přechody mezi hodnotami, což je užitečné pro simulaci přírodních povrchů. Simplex noise je efektivnější varianta Perlinova šumu, která je výpočetně méně náročná. Billow vytváří měkké, nafouknuté vzory, zatímco Gaussian používá pravděpodobnostní rozdělení k tvorbě hladších přechodů. Voronoi vytváří šum rozdělením prostoru na buňky, což připomíná vzory na žirafí srsti nebo popraskanou zem.
 Co je to izotropie?
-	>
+	>Izotropie je fyzikální vlastnost materiálů, která říká, že jejich chování (např. odraz nebo rozptyl světla) je stejné ve všech směrech. Naopak anizotropie znamená, že materiál se chová různě v závislosti na směru, což lze vidět například u kartáčovaného kovu, kde jsou odrazy protáhlé v jednom směru.
 Uveďte příklad generování materiálu použitím procedurálních textur. Jakými způsoby můžeme zajistit nepravidelnosti povrchu?
 	>Hustým šumem vytvoříme texturu hrubé omítky. Pomocí dalšího šumu uděláme hladší a méně kontrastní skvrny na omítce. Smícháme gradient mapu a noise abychom přelnuli plíšnové fleky na téže zdi. Pomocí přelínajících se šumů, na které naneseme filtry.
 Co je to bezešvá (seamless) textura?
 	>Textura která se dá napojit na sama sebe, bez jasného okraje
 Co je ve 3D textuře decal a proč jej chceme používat? Odkud tento pojem pochází?
-	>Pochází z modelařiny/automobilů. Je to aplikování průhledné "nálepky" na model. Hodí se, pokud potřebujeme udělat custom modely (
+	>Decal ve 3D grafice představuje texturu, která se aplikuje na model jako "nálepka" nebo překrytí. Využívá se například k přidání detailů, jako jsou škrábance, graffiti nebo logo, bez potřeby úpravy hlavní textury modelu. Tento pojem pochází z modelářství a automobilového průmyslu, kde "decal" označuje dekorativní samolepky aplikované na povrch objektů.
 Co je to fotogrametrie a na jakém principu je postavená?
 	>Naskenujeme reálný objekt a převedeme ho do 3d prostoru. To se potá dá využít jako podklad pro jedodušší modelování, ale hrubé modely bez úprav jsou většinou nepoužitelné sami o sobě.
 Co je to PTEX, kdo s ním přišel poprvé (a v jakém celovečerním filmu), jaké má přednosti a limity?
-	>
+	>PTEX je technologie texturování, kterou poprvé představila společnost Disney ve filmu Bolt (2008). Umožňuje texturování modelů bez potřeby UV mapy – každá plocha modelu je texturována samostatně. Výhodou je vyšší efektivita při práci s modely s vysokou hustotou polygonů. Hlavní limitací je menší podpora ve srovnání s tradičními UV-based metodami a vyšší nároky na paměť. Nepodporováno game enginy.
 Co je to UDIM a k čemu se používá v praxi?
-	>
+	>Prolínání několik textur na jeden UV set. Hodí se u filmů, kdy potřebujeme NAPŘ close-up postavy, a tak i vyšší rozlišení, bez toho abychom museli měnit model/texturu.
 Jak fungují a jak se používají programy v balíku Adobe Substance (Painter, Designer, Sampler, Stager) nebo Marmoset Toolbag?
-	>
+	>Adobe Substance Painter slouží k ručnímu malování textur přímo na 3D model. Substance Designer je nástroj pro vytváření procedurálních materiálů. Substance Sampler umožňuje vytvářet textury na základě fotografií a jejich kombinací. Substance Stager je nástroj pro sestavování scén a renderování. Marmoset Toolbag je softwarový nástroj pro vizualizaci a rendering 3D modelů v reálném čase, umožňuje také snadnou tvorbu prezentací a materiálových úprav.
 Jak se postupuje při výrobě procedurálního materiálu v Substance Painteru? (generátory, filtry, masky)
-	>
+	>Nejprve se vybere základní materiál nebo textura, poté se aplikují generátory (automatické efekty, jako je opotřebení nebo špína) pro vytváření detailů. Filtry umožňují úpravu materiálových vlastností, jako je ostrost nebo barevnost. Masky jsou využívány pro selektivní aplikaci materiálů na určité části modelu, což dává uživatelům kontrolu nad tím, jak a kde se aplikují efekty.
